@@ -1,0 +1,24 @@
+{
+  "name": "express-resourceful",
+  "version": "0.0.1",
+  "description": "Allows for loading resources from a filesystem structure matching the URI",
+  "main": "index.js",
+  "repository": "",
+  "keywords": [
+    "express",
+    "resources",
+    "rest",
+    "resourceful"
+  ],
+  "author": "Dominic Barnes <dominic@dbarnes.info>",
+  "license": "MIT",
+  "dependencies": {
+    "glob": "*",
+    "methods": "*",
+    "lodash": "*"
+  },
+  "devDependencies": {
+    "express": "*",
+    "should": "*"
+  }
+}
