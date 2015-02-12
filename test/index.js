@@ -74,7 +74,7 @@ describe('express-resourceful', function () {
     assert.deepEqual(params(app), [ 'user' ]);
   });
 
-  it.only('should sort routes in a reasonable way', function () {
+  it('should sort routes in a reasonable way', function () {
     var app = express.Router();
 
     resources(app, fixture('sort-order'));
