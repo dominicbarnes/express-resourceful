@@ -2,23 +2,28 @@
   "name": "express-resourceful",
   "version": "0.0.1",
   "description": "Allows for loading resources from a filesystem structure matching the URI",
-  "main": "index.js",
-  "repository": "",
+  "author": "Dominic Barnes <dominic@dbarnes.info>",
+  "repository": "dominicbarnes/express-resourceful",
   "keywords": [
     "express",
     "resources",
     "rest",
-    "resourceful"
+    "resourceful",
+    "routes",
+    "handlers",
+    "helper"
   ],
-  "author": "Dominic Barnes <dominic@dbarnes.info>",
   "license": "MIT",
   "dependencies": {
-    "glob": "*",
-    "methods": "*",
-    "lodash": "*"
+    "debug": "^2.1.1",
+    "glob": "^4.3.5",
+    "methods": "^1.1.1"
   },
   "devDependencies": {
-    "express": "*",
-    "should": "*"
+    "express": "^4.11.2",
+    "mocha": "^2.1.0"
+  },
+  "scripts": {
+    "test": "mocha"
   }
 }

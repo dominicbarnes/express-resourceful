@@ -1,27 +1,49 @@
-var glob    = require("glob"),
-    _       = require("lodash"),
-    methods = require("methods"),
-    util    = require("./lib/util");
+var debug = require('debug')('express-resourceful');
+var glob = require('glob');
+var methods = require('methods');
+var path = require('path');
 
-module.exports = function (app, base, opts) {
-    opts = opts || Object.create(null);
+module.exports = function (app, base, callback) {
+  var options = {
+    cwd: path.resolve(base),
+    matchBase: true
+  };
 
-    glob("**/*.js", { cwd: base }, function (err, resources) {
-        if (err) throw new Error(err);
+  glob('*.js', options, function (err, files) {
+    if (err) return callback(err);
 
-        _.each(resources, function (mod) {
-            var resource = require(base + "/" + mod),
-                url = resource.url || util.path2url(mod);
+    debug('found %d resources', files.length);
 
-            if (opts.debug) console.log("\nLoading resource file: %s", mod);
+    files.forEach(function (file) {
+      var resource = require(path.resolve(base, file));
+      var url = resource.url || path2url(file);
+      debug('processing resource %s', file, url);
 
-            _.each(_.intersection(methods, _.keys(resource)), function (method) {
-                if (opts.debug) console.log(" * %s %s", method.toUpperCase(), url);
-
-                app[method](url, resource[method]);
-            });
+      if (isParam(file)) {
+        app.param(path.basename(file, '.js'), resource);
+      } else {
+        methods.forEach(function (method) {
+          if (method in resource) {
+            debug('adding %s %s handler', method, url);
+            app[method](url, resource[method]);
+          }
         });
-
-        if (opts.callback) opts.callback();
+      }
     });
+
+    callback();
+  });
 };
+
+function path2url(file) {
+  var base = path.basename(file, '.js');
+  var dir = path.dirname(file);
+
+  if (dir === '.') dir = '';
+
+  return '/' + (base === 'index' ? dir : path.join(dir, base));
+}
+
+function isParam(file) {
+  return file.slice(0, 7) === '_params';
+}
