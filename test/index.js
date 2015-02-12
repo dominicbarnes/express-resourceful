@@ -10,92 +10,80 @@ describe('express-resourceful', function () {
     assert.equal(typeof resources, 'function');
   });
 
-  it('should automatically add to the express router', function (done) {
+  it('should automatically add to the express router', function () {
     var app = express.Router();
 
-    resources(app, fixture('simple'), function (err) {
-      if (err) return done(err);
+    resources(app, fixture('simple'));
 
-      assert.deepEqual(routes(app), {
-        '/': [ 'get' ]
-      });
-
-      done();
+    assert.deepEqual(routes(app), {
+      '/': [ 'get' ]
     });
   });
 
-  it('should incorporate nested directories into the path', function (done) {
+  it('should incorporate nested directories into the path', function () {
     var app = express.Router();
 
-    resources(app, fixture('nested'), function (err) {
-      if (err) return done(err);
+    resources(app, fixture('nested'));
 
-      assert.deepEqual(routes(app), {
-        '/': [ 'get' ],
-        '/a/b/c': [ 'get' ]
-      });
-
-      done();
+    assert.deepEqual(routes(app), {
+      '/': [ 'get' ],
+      '/a/b/c': [ 'get' ]
     });
   });
 
-  it('should allow overriding the url internally', function (done) {
+  it('should allow overriding the url internally', function () {
     var app = express.Router();
 
-    resources(app, fixture('custom-url'), function (err) {
-      if (err) return done(err);
+    resources(app, fixture('custom-url'));
 
-      assert.deepEqual(routes(app), {
-        '/custom': [ 'get' ]
-      });
-
-      done();
+    assert.deepEqual(routes(app), {
+      '/custom': [ 'get' ]
     });
   });
 
-  it('should handle route params correctly', function (done) {
+  it('should handle route params correctly', function () {
     var app = express.Router();
 
-    resources(app, fixture('url-params'), function (err) {
-      if (err) return done(err);
+    resources(app, fixture('url-params'));
 
-      assert.deepEqual(routes(app), {
-        '/:a': [ 'get' ],
-        '/a/:b': [ 'get' ]
-      });
-
-      done();
+    assert.deepEqual(routes(app), {
+      '/:a': [ 'get' ],
+      '/a/:b': [ 'get' ]
     });
   });
 
-  it('should attach multiple methods if exported', function (done) {
+  it('should attach multiple methods if exported', function () {
     var app = express.Router();
 
-    resources(app, fixture('methods'), function (err) {
-      if (err) return done(err);
+    resources(app, fixture('methods'));
 
-      assert.deepEqual(routes(app), {
-        '/': [ 'delete', 'get', 'post', 'put' ]
-      });
-
-      done();
+    assert.deepEqual(routes(app), {
+      '/': [ 'delete', 'get', 'post', 'put' ]
     });
   });
 
-  it('should use the _params directory for params instead of routes', function (done) {
+  it('should use the _params directory for params instead of routes', function () {
     var app = express.Router();
 
-    resources(app, fixture('params'), function (err) {
-      if (err) return done(err);
+    resources(app, fixture('params'));
 
-      assert.deepEqual(routes(app), {
-        '/': [ 'get' ]
-      });
-
-      assert.deepEqual(Object.keys(app.params), [ 'user' ]);
-
-      done();
+    assert.deepEqual(routes(app), {
+      '/': [ 'get' ]
     });
+
+    assert.deepEqual(params(app), [ 'user' ]);
+  });
+
+  it.only('should sort routes in a reasonable way', function () {
+    var app = express.Router();
+
+    resources(app, fixture('sort-order'));
+
+    var routes = app.stack.map(function (fn) {
+      return fn.route.path;
+    });
+
+    assert.deepEqual(routes, [ '/', '/page', '/:page' ]);
   });
 });
 
@@ -113,4 +101,8 @@ function routes(router) {
   });
 
   return ret;
+}
+
+function params(router) {
+  return Object.keys(router.params).sort();
 }
