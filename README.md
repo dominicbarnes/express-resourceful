@@ -66,6 +66,8 @@ module.exports = function (req, res, next, id) {
 Will scan the given `dir` (sychronously) for resource files and mount them to
 `app`. (which can either be a plain express app or an `express.Router` instance)
 
+Any files found in the `_params` directory will be treated as param handlers.
+
 **NOTE**: Resource files beginning with a `:` (ie: route params) will be mounted
 **after** static routes, to prevent a route like `/users/new` from being preempted
 by `users/:user`.
