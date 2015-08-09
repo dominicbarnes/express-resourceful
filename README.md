@@ -61,10 +61,12 @@ module.exports = function (req, res, next, id) {
 
 ## API
 
-### `resourceful(app, dir)`
+### `resourceful(app, dir, [prefix])`
 
 Will scan the given `dir` (sychronously) for resource files and mount them to
 `app`. (which can either be a plain express app or an `express.Router` instance)
+
+The optional `prefix` will be prepended onto the generated paths.
 
 Any files found in the `_params` directory will be treated as param handlers.
 
