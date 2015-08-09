@@ -85,6 +85,16 @@ describe('express-resourceful', function () {
 
     assert.deepEqual(routes, [ '/', '/page', '/:page' ]);
   });
+
+  it('should add prefixes to the paths', function () {
+    var app = express.Router();
+
+    resources(app, fixture('simple'), '/api');
+
+    assert.deepEqual(routes(app), {
+      '/api/': [ 'get' ]
+    });
+  });
 });
 
 function routes(router) {

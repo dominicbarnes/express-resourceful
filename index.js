@@ -3,7 +3,7 @@ var glob = require('glob').sync;
 var methods = require('methods');
 var path = require('path');
 
-module.exports = function (app, base) {
+module.exports = function (app, base, prefix) {
   var options = {
     cwd: path.resolve(base),
     matchBase: true
@@ -17,6 +17,7 @@ module.exports = function (app, base) {
   files.forEach(function (file) {
     var resource = require(path.resolve(base, file));
     var url = resource.url || path2url(file);
+    if (prefix) url = prefix += url;
 
     if (isParam(file)) {
       var name = path.basename(file, '.js');
