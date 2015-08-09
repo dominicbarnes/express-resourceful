@@ -1,6 +1,6 @@
 {
   "name": "express-resourceful",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Allows for loading resources from a filesystem structure matching the URI",
   "author": "Dominic Barnes <dominic@dbarnes.info>",
   "repository": "dominicbarnes/express-resourceful",
